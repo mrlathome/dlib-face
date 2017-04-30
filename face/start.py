@@ -6,7 +6,7 @@ import numpy as np
 import dlib
 
 detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
+predictor = dlib.shape_predictor("./data/shape_predictor_68_face_landmarks.dat")
 
 try:
     cam = cv2.VideoCapture(0)
