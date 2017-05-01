@@ -11,7 +11,7 @@ from imutils import face_utils
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("./data/shape_predictor_68_face_landmarks.dat")
 
-alpha = 0.35
+alpha = 0.67
 
 def draw_face(d,output,color):
     scale_x = (d.right() - d.left())/4
@@ -67,12 +67,13 @@ def process():
                 left_distance = int(get_distance(shape[33],shape[45]))
                 face_align = right_distance - left_distance                
 
+                face_align_text = "right"
                 if face_align > -5 and face_align < 5:
-                    cv2.putText(blank_image,"center",(d.left(),d.bottom() + 15),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
+                    face_align_text = "center"
                 elif face_align < -5:
-                    cv2.putText(blank_image,"left",(d.left(),d.bottom() + 15),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
-                else:
-                    cv2.putText(blank_image,"right",(d.left(),d.bottom() + 15),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
+                    face_align_text = "left"                
+
+                cv2.putText(blank_image,face_align_text,(d.left(),d.bottom() + 15),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
 
                 if (face_angle > -10 and face_angle < 10):
                     draw_face(d,blank_image,(100,255,100))
