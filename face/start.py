@@ -11,7 +11,7 @@ from imutils import face_utils
 detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor("./data/shape_predictor_68_face_landmarks.dat")
 
-alpha = 0.67
+alpha = 0.90
 
 def draw_face(d,output,color):
     scale_x = (d.right() - d.left())/4
@@ -56,8 +56,9 @@ def process():
                 
                 face_scale_x = float(d.right() - d.left())/width                
                 
-                draw_landmark(shape,"mouth",blank_image)
+                # draw_landmark(shape,"mouth",blank_image)
                 draw_landmark(shape,"nose",blank_image)
+                # draw_landmark(shape,"jaw",blank_image)
                 draw_landmark(shape,"right_eye",blank_image)
                 draw_landmark(shape,"left_eye",blank_image)
 
@@ -71,8 +72,12 @@ def process():
                 if face_align > -5 and face_align < 5:
                     face_align_text = "center"
                 elif face_align < -5:
-                    face_align_text = "left"                
+                    face_align_text = "left"
 
+                cv2.circle(blank_image,(shape[8][0],shape[8][1]),1,(0,200,100),1)
+                cv2.circle(blank_image,(shape[16][0],shape[16][1]),1,(0,200,100),1)  
+                cv2.circle(blank_image,(shape[0][0],shape[0][1]),1,(0,100,200),1)                 
+                cv2.putText(blank_image,str(int(get_distance(shape[0],shape[8]))),(d.left(),d.bottom() + 30),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
                 cv2.putText(blank_image,face_align_text,(d.left(),d.bottom() + 15),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))
 
                 if (face_angle > -10 and face_angle < 10):
@@ -81,8 +86,7 @@ def process():
                     draw_face(d,blank_image,(100,100,255))
 
                 cv2.putText(blank_image,"tetha {}".format(face_angle),(d.left(),d.top() - 5),cv2.FONT_HERSHEY_DUPLEX,face_scale_x,(100,100,200))     
-                
-                
+                                
             blank_image = cv2.resize(blank_image,(0,0),fx=2,fy=2)
             cv2.addWeighted(blank_image, alpha, original_image, 1 - alpha, 0, original_image)
 
